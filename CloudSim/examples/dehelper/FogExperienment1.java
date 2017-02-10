@@ -51,9 +51,9 @@ public class FogExperienment1 {
 			String inputFolder = Dvfs.class.getClassLoader().getResource("workload/planetlab").getPath();
 			String outputFolder = "outputfogt1";
 			String workload = "20110303"; // Random workload
-			String vmAllocationPolicy = "dvfs"; // DVFS policy without VM migrations
-			String vmSelectionPolicy = "";
-			String parameter = "";
+			String vmAllocationPolicy = "lr"; // DVFS policy without VM migrations
+			String vmSelectionPolicy = "mmt";
+			String parameter = "1.2";
 			for(int j=0;j<3;j++){
 			
 			new FogRunner(

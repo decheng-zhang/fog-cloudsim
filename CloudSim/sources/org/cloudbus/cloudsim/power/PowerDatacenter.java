@@ -206,6 +206,7 @@ public class PowerDatacenter extends Datacenter {
 		double minTime = Double.MAX_VALUE;
 		double timeDiff = currentTime - getLastProcessTime();
 		double timeFrameDatacenterEnergy = 0.0;
+		int timeFrameHostUsedNumber = 0;
 
 		Log.printLine("\n\n--------------------------------------------------------------\n\n");
 		Log.formatLine("New resource usage for the time frame starting at %.2f:", currentTime);
@@ -239,7 +240,7 @@ public class PowerDatacenter extends Datacenter {
 						utilizationOfCpu,
 						timeDiff);
 				timeFrameDatacenterEnergy += timeFrameHostEnergy;
-
+				timeFrameHostUsedNumber+= timeFrameHostEnergy>0 ? 1:0;
 				Log.printLine();
 				Log.formatLine(
 						"%.2f: [Host #%d] utilization at %.2f was %.2f%%, now is %.2f%%",
@@ -256,9 +257,10 @@ public class PowerDatacenter extends Datacenter {
 			}
 
 			Log.formatLine(
-					"\n%.2f: Data center's energy is %.2f W*sec\n",
+					"\n%.2f: Data center's energy is %.2f W*sec with %d host(s)\n",
 					currentTime,
-					timeFrameDatacenterEnergy);
+					timeFrameDatacenterEnergy,
+					timeFrameHostUsedNumber);
 		}
 
 		setPower(getPower() + timeFrameDatacenterEnergy);

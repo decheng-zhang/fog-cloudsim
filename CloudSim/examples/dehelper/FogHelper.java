@@ -38,7 +38,11 @@ import org.cloudbus.cloudsim.power.PowerDatacenterBroker;
 import org.cloudbus.cloudsim.power.PowerHost;
 import org.cloudbus.cloudsim.power.PowerHostUtilizationHistory;
 import org.cloudbus.cloudsim.power.PowerVm;
+import org.cloudbus.cloudsim.power.PowerVmAllocationPolicyMigrationAbstract;
+import org.cloudbus.cloudsim.power.PowerVmAllocationPolicyMigrationLocalRegression;
+import org.cloudbus.cloudsim.power.PowerVmAllocationPolicyMigrationStaticThreshold;
 import org.cloudbus.cloudsim.power.PowerVmAllocationPolicySimple;
+import org.cloudbus.cloudsim.power.PowerVmSelectionPolicyMinimumMigrationTime;
 import org.cloudbus.cloudsim.provisioners.BwProvisionerSimple;
 import org.cloudbus.cloudsim.provisioners.PeProvisionerSimple;
 import org.cloudbus.cloudsim.provisioners.RamProvisionerSimple;
@@ -205,6 +209,16 @@ public class FogHelper {
 			
 			List<PowerHost> hostList = createHostList(j,FogConst.NUMBER_OF_HOSTS);
 			//VmAllocationPolicy vmAllocationPolicy = new PowerVmAllocationPolicySimple(hostList);
+			PowerVmAllocationPolicyMigrationAbstract fallbackVmSelectionPolicy = new PowerVmAllocationPolicyMigrationStaticThreshold(
+					hostList,
+					new PowerVmSelectionPolicyMinimumMigrationTime(),
+					0.7);
+			vmAllocationPolicy = new PowerVmAllocationPolicyMigrationLocalRegression(
+					hostList,
+					new PowerVmSelectionPolicyMinimumMigrationTime(),
+					1.2,
+					Constants.SCHEDULING_INTERVAL,
+					fallbackVmSelectionPolicy);
 			String arch = "x86"; // system architecture
 			String os = "Linux"; // operating system
 			String vmm = "Xen";
@@ -239,7 +253,7 @@ public class FogHelper {
 						).newInstance(
 						name+"-datacenter",
 						characteristics,
-						new PowerVmAllocationPolicySimple(hostList),
+						vmAllocationPolicy,
 						new LinkedList<Storage>(),
 						Constants.SCHEDULING_INTERVAL,
 						coor[0],
