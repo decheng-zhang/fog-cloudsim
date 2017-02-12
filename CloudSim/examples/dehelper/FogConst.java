@@ -32,8 +32,8 @@ public final class FogConst {
 	
 	public final static int NUMBER_OF_VMS = 1;
 
-	public final static int NUMBER_OF_HOSTS = 5;
-	public final static int NUMBER_OF_CLOUDLETS  = 10;
+	public final static int NUMBER_OF_HOSTS = 10;
+	public final static int NUMBER_OF_CLOUDLETS  = 20;
 
 	public final static long CLOUDLET_UTILIZATION_SEED = 1;
 	

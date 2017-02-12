@@ -42,6 +42,7 @@ import org.cloudbus.cloudsim.power.PowerVmAllocationPolicyMigrationAbstract;
 import org.cloudbus.cloudsim.power.PowerVmAllocationPolicyMigrationLocalRegression;
 import org.cloudbus.cloudsim.power.PowerVmAllocationPolicyMigrationStaticThreshold;
 import org.cloudbus.cloudsim.power.PowerVmAllocationPolicySimple;
+import org.cloudbus.cloudsim.power.PowerVmSelectionPolicy;
 import org.cloudbus.cloudsim.power.PowerVmSelectionPolicyMinimumMigrationTime;
 import org.cloudbus.cloudsim.provisioners.BwProvisionerSimple;
 import org.cloudbus.cloudsim.provisioners.PeProvisionerSimple;
@@ -209,13 +210,14 @@ public class FogHelper {
 			
 			List<PowerHost> hostList = createHostList(j,FogConst.NUMBER_OF_HOSTS);
 			//VmAllocationPolicy vmAllocationPolicy = new PowerVmAllocationPolicySimple(hostList);
+			PowerVmSelectionPolicy vmSelectionPolicy =new PowerVmSelectionPolicyMinimumMigrationTime();
 			PowerVmAllocationPolicyMigrationAbstract fallbackVmSelectionPolicy = new PowerVmAllocationPolicyMigrationStaticThreshold(
 					hostList,
-					new PowerVmSelectionPolicyMinimumMigrationTime(),
+					vmSelectionPolicy,
 					0.7);
 			vmAllocationPolicy = new PowerVmAllocationPolicyMigrationLocalRegression(
 					hostList,
-					new PowerVmSelectionPolicyMinimumMigrationTime(),
+					vmSelectionPolicy,
 					1.2,
 					Constants.SCHEDULING_INTERVAL,
 					fallbackVmSelectionPolicy);

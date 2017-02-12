@@ -17,6 +17,7 @@ import org.cloudbus.cloudsim.examples.power.Constants;
 import org.cloudbus.cloudsim.examples.power.Helper;
 import org.cloudbus.cloudsim.examples.power.random.RandomConstants;
 import org.cloudbus.cloudsim.examples.power.random.RandomHelper;
+import org.cloudbus.cloudsim.lists.CloudletList;
 import org.cloudbus.cloudsim.power.PowerDatacenter;
 import org.cloudbus.cloudsim.power.PowerVmAllocationPolicySimple;
 
@@ -103,8 +104,9 @@ public class FogRunner extends RunnerAbstract{
 				Log.print(NetworkTopology.printOutGraph());
 				*/
 				Map<Integer,List<Integer>> fogCenterToVmMapping = new HashMap<Integer,List<Integer>>();
+				double totalMeanDistance []=new double[iterVersion];
 				for (int j = 0; j < iterVersion; j++) {
-					
+					double [] localcoor =FogHelper.getClusterResult().get(j).getCenter().getPoint();
 					Fog fog = (Fog) FogHelper.createFog((double[]) FogHelper.getClusterResult().get(j).getCenter().getPoint(), j, PowerDatacenter.class, vmAllocationPolicy);
 					
 					PowerDatacenter datacenter =fog.getDatacenter();
@@ -112,12 +114,20 @@ public class FogRunner extends RunnerAbstract{
 					datacenterList.add(datacenter);
 					int datacenterId = datacenter.getId();
 					List<Integer> cloudletIdList = new ArrayList<Integer>();
+					List<Cloudlet> cloudletList = new ArrayList<Cloudlet>();
 					for(Point pt: FogHelper.getClusterResult().get(j).getPoints()) {
 						cloudletIdList.add(pt.getCloudletID());
+						cloudletList.add(pt.getCloudlet());
 					}
 						fogCenterToVmMapping.put(datacenterId, cloudletIdList);
-					}
+						totalMeanDistance[j] =(CloudletList.getMeanDistance(cloudletList,localcoor));
 				
+				}
+				 	double sum = 0;
+				    for (double i : totalMeanDistance){
+				      sum += i;
+				    }
+					System.out.print(sum/iterVersion);
 				FogHelper.setFogCenterToVmMapping(fogCenterToVmMapping);
 				broker.submitVmList(vmList);
 				broker.submitCloudletList(cloudletList);
