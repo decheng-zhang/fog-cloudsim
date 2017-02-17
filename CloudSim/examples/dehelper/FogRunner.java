@@ -127,7 +127,7 @@ public class FogRunner extends RunnerAbstract{
 				    for (double i : totalMeanDistance){
 				      sum += i;
 				    }
-					System.out.print(sum/iterVersion);
+					System.out.print("The average distance from cloudlets to nearest fog server is " +  sum/iterVersion);
 				FogHelper.setFogCenterToVmMapping(fogCenterToVmMapping);
 				broker.submitVmList(vmList);
 				broker.submitCloudletList(cloudletList);

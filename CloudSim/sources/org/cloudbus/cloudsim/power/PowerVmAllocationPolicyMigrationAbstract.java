@@ -221,6 +221,11 @@ public abstract class PowerVmAllocationPolicyMigrationAbstract extends PowerVmAl
 				if (getUtilizationOfCpuMips(host) != 0 && isHostOverUtilizedAfterAllocation(host, vm)) {
 					continue;
 				}
+				
+				if (getUtilizationOfCpuMips(host) ==2500) {
+					allocatedHost = host;
+					break;
+				}
 
 				try {
 					double powerAfterAllocation = getPowerAfterAllocation(host, vm);
