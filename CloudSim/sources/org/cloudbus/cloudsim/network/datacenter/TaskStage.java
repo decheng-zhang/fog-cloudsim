@@ -24,6 +24,15 @@ package org.cloudbus.cloudsim.network.datacenter;
  */
 public class TaskStage {
 
+	/**
+	 * @param type execution, recv or send
+	 * @param data data generated or send or recv
+	 * @param time execution time for this stage
+	 * @param stageid
+	 * @param memory
+	 * @param peer from whom data needed to be recieved or send
+	 * @param vpeer
+	 */
 	public TaskStage(int type, double data, double time, double stageid, long memory, int peer, int vpeer) {
 		super();
 		this.type = type;
