@@ -1,5 +1,6 @@
 package dehelper;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -30,7 +31,8 @@ public class Fog {
 	private PowerDatacenter DC;
 	
 	public Fog(int fogId,double[] coor, String name, PowerDatacenter datacenter) {
-		Log.printLine("Fog " + name + "is initialized at "+ "("+coor[0]+"," +coor[1]+")" );
+		DecimalFormat dft = new DecimalFormat("###.####");
+		Log.printLine("Fog " + name + "is initialized at "+ "("+ dft.format(coor[0])+"," +dft.format(coor[1])+")" );
 		
 		id = fogId;
 		this.x = coor[0];

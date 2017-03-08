@@ -222,15 +222,19 @@ public abstract class PowerVmAllocationPolicyMigrationAbstract extends PowerVmAl
 					continue;
 				}
 				
-				if (getUtilizationOfCpuMips(host) ==2500) {
+				/*if (getUtilizationOfCpuMips(host) ==2500) {
 					allocatedHost = host;
 					break;
-				}
+				}*/
 
 				try {
 					double powerAfterAllocation = getPowerAfterAllocation(host, vm);
 					if (powerAfterAllocation != -1) {
+						
 						double powerDiff = powerAfterAllocation - host.getPower();
+						if (getUtilizationOfCpuMips(host)==0) {
+							powerDiff+=200;
+						}
 						if (powerDiff < minPower) {
 							minPower = powerDiff;
 							allocatedHost = host;
