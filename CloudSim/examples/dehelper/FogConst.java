@@ -32,33 +32,47 @@ public final class FogConst {
 	
 	public final static int NUMBER_OF_VMS = 1;
 
-	public final static int NUMBER_OF_HOSTS = 15;
-	public final static int NUMBER_OF_CLOUDLETS  = 30;
+	//public final static int NUMBER_OF_HOSTS = 15; Using host_types as count of host
+	public final static int NUMBER_OF_CLOUDLETS  = 12;
 
 	public final static long CLOUDLET_UTILIZATION_SEED = 1;
-	
-	public final static int VM_TYPES	= 4;
-	public final static int[] VM_MIPS	= { 2500, 2000, 1000, 500 };
-	public final static int[] VM_PES	= { 1, 1, 1, 1 };
-	public final static int[] VM_RAM	= { 870,  1740, 1740, 648 };
+	/*
+	 * VM types:
+	 * 	t2.small 1 vcpu, 2 Gib, 0.023 /h
+	 * t2.medium 2 vcpu, 4 Gib, 0.047 /h
+	 * t2.large 2 vcpu, 8 Gib, 0.094 /h
+	 * t2.xlarge 4 vcpu, 16 Gib, 0.188 /h
+	 * t2.2xlarge 8 vcpu, 32 Gib, 0.376 /h
+	 */
+	public final static int VM_TYPES	= 5;
+	public final static int[] VM_MIPS	= { 2300, 2300, 2300, 2400,2400 };
+	public final static int[] VM_PES	= { 1, 2, 2, 4, 8 };
+	public final static int[] VM_RAM	= { 2048,  4096, 8192, 16384, 32768};
 	public final static int VM_BW		= 100000; // 100 Mbit/s
 	public final static int VM_SIZE		= 2500; // 2.5 GB
 
 	/*
 	 * Host types:
-	 *   HP ProLiant ML110 G4 (1 x [Xeon 3040 1860 MHz, 2 cores], 4GB)
-	 *   HP ProLiant ML110 G5 (1 x [Xeon 3075 2660 MHz, 2 cores], 4GB)
+	 *   HP ProLiant ML110 G4 (1 x [Xeon 3040 1860 MHz, 2 cores], 4GB, MSRP: $595)
+	 *   HP ProLiant ML110 G5 (1 x [Xeon 3075 2660 MHz, 2 cores], 4GB, MSRP: $799)
+	 *   32 GB single Hex(1 x [Xeon E5-2640 2500 MHz, 6 cores], 32GB, 5x300GB 4x1Gb NIC, Pricing: $449/mo)
+	 *   64 GB Dual Hex (2 x [Xeon E5-2640 2500 MHz, 6 cores], 64 GB,2x600GB 4x1Gb NIC,Pricing: $640/mo)
+	 *   128 GB Quad Octa (4 x [Xeon E5-4640 2400 MHz 8 cores], 128GB, 2x300GB 4x1Gb NIC,Pricing: $879/mo)
 	 *   We increase the memory size to enable over-subscription (x4)
 	 */
-	public final static int HOST_TYPES	 = 2;
-	public final static int[] HOST_MIPS	 = { 1860, 2660 };
-	public final static int[] HOST_PES	 = { 2, 2 };
-	public final static int[] HOST_RAM	 = { 4096, 4096 };
+	public final static int HOST_TYPES	 =5;
+	public final static int[] HOST_MIPS	 = { 1860, 2660 ,2500,2500,2500};
+	public final static int[] HOST_PES	 = { 2, 2 ,6,12,32};
+	public final static int[] HOST_RAM	 = { 4096, 4096 ,32768,65536,131072};
 	public final static int HOST_BW		 = 1000000; // 1 Gbit/s
 	public final static int HOST_STORAGE = 1000000; // 1 TB
 
 	public final static PowerModel[] HOST_POWER = {
 		new PowerModelSpecPowerHpProLiantMl110G4Xeon3040(),
-		new PowerModelSpecPowerHpProLiantMl110G5Xeon3075()
+		new PowerModelSpecPowerHpProLiantMl110G5Xeon3075(),
+		new PowerModelSpecPowerHpProLiantMl110G5Xeon3075(),
+		new PowerModelSpecPowerHpProLiantMl110G4Xeon3040(),
+		new PowerModelSpecPowerHpProLiantMl110G4Xeon3040(),
+		
 	};
 }

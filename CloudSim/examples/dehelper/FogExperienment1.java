@@ -54,7 +54,7 @@ public class FogExperienment1 {
 			String vmAllocationPolicy = "lr"; // DVFS policy without VM migrations
 			String vmSelectionPolicy = "mmt";
 			String parameter = "1.2";
-			for(int j=0;j<5;j++){
+			for(int j=0;j<2;j++){
 			
 			new FogRunner(
 					enableOutput,

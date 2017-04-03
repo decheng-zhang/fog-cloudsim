@@ -33,6 +33,16 @@ public class CloudletList {
 		
 	}
 
+	public static <T extends Cloudlet> double getSubAdditiveDistance(List<T> cloudletList, double[] coor) {
+		double total =0;
+		
+		for (T cloudlet: cloudletList) {
+			total+=Math.sqrt(Math.pow((cloudlet.getxAxis()-coor[0]),2)+Math.pow((cloudlet.getyAxis()-coor[1]), 2));
+			
+		}
+		return total;
+		
+	}
 	/**
 	 * Gets the by id.
 	 * 

@@ -8,6 +8,7 @@
 
 package org.cloudbus.cloudsim.power;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -53,6 +54,13 @@ public class PowerDatacenter extends Datacenter {
 	/** The geographic position. */
 	private double[] position;
 	
+	/** The used host count history. */
+	private List<Integer> hostCountHistory;
+	
+	public List<Integer> getHostCountHistory() {
+		return hostCountHistory;
+	}
+
 	public double[] getPosition() {
 		return position;
 	}
@@ -129,7 +137,7 @@ public class PowerDatacenter extends Datacenter {
 
 		// if some time passed since last processing
 		if (currentTime > getLastProcessTime()) {
-			System.out.print(currentTime + " ");
+			//System.out.print(currentTime + " ");
 
 			double minTime = updateCloudetProcessingWithoutSchedulingFutureEventsForce();
 
@@ -261,6 +269,12 @@ public class PowerDatacenter extends Datacenter {
 					currentTime,
 					timeFrameDatacenterEnergy,
 					timeFrameHostUsedNumber);
+			if (hostCountHistory == null) {
+				hostCountHistory = new ArrayList<Integer>();}
+			
+			hostCountHistory.add(timeFrameHostUsedNumber);
+			
+			
 		}
 
 		setPower(getPower() + timeFrameDatacenterEnergy);

@@ -2,6 +2,7 @@ package dehelper;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +37,7 @@ public class FogRunner extends RunnerAbstract{
 			boolean enableOutput,
 			boolean outputToFile,
 			String inputFolder,
+			//TODO Adding workload input
 			String outputFolder,
 			String workload,
 			String vmAllocationPolicy,
@@ -104,13 +106,17 @@ public class FogRunner extends RunnerAbstract{
 				Log.print(NetworkTopology.printOutGraph());
 				*/
 				Map<Integer,List<Integer>> fogCenterToVmMapping = new HashMap<Integer,List<Integer>>();
-				double totalMeanDistance []=new double[iterVersion];
+				double totalMeanDistance=0;
+				double totalNetworkBuildingCost = 0;
+				double fogCoorlist[][] = new double [iterVersion][2];
 				for (int j = 0; j < iterVersion; j++) {
 					double [] localcoor =FogHelper.getClusterResult().get(j).getCenter().getPoint();
+					fogCoorlist[j]= localcoor;
 					Fog fog = (Fog) FogHelper.createFog((double[]) FogHelper.getClusterResult().get(j).getCenter().getPoint(), j, PowerDatacenter.class, vmAllocationPolicy);
 					
 					PowerDatacenter datacenter =fog.getDatacenter();
-					datacenter.setDisableMigrations(false);
+					
+					datacenter.setDisableMigrations(true);
 					datacenterList.add(datacenter);
 					int datacenterId = datacenter.getId();
 					List<Integer> cloudletIdList = new ArrayList<Integer>();
@@ -120,14 +126,16 @@ public class FogRunner extends RunnerAbstract{
 						cloudletList.add(pt.getCloudlet());
 					}
 						fogCenterToVmMapping.put(datacenterId, cloudletIdList);
-						totalMeanDistance[j] =(CloudletList.getMeanDistance(cloudletList,localcoor));
-				
-				}
-				 	double sum = 0;
-				    for (double i : totalMeanDistance){
-				      sum += i;
-				    }
-					System.out.print("The average distance from cloudlets to nearest fog server is " +  sum/iterVersion);
+						totalMeanDistance+=(CloudletList.getMeanDistance(cloudletList,localcoor));
+						double subaddtive  = 0;
+						for(int i=0;i<j;i++) {
+						subaddtive +=Math.sqrt(Math.pow((fogCoorlist[i][0]-fogCoorlist[j][0]),2)+Math.pow((fogCoorlist[i][1]-fogCoorlist[j][1]), 2)); }
+						totalNetworkBuildingCost +=subaddtive;
+						
+				};
+				 	
+					System.out.print("The average distance from cloudlets to nearest fog server is " +  totalMeanDistance/iterVersion);
+					System.out.print("The total network need to build " +  totalNetworkBuildingCost);
 				FogHelper.setFogCenterToVmMapping(fogCenterToVmMapping);
 				broker.submitVmList(vmList);
 				broker.submitCloudletList(cloudletList);
@@ -139,17 +147,19 @@ public class FogRunner extends RunnerAbstract{
 					}
 						//}
 				
-				CloudSim.terminateSimulation(1200);
+				CloudSim.terminateSimulation(2000);
 				double lastClock = CloudSim.startSimulation();
 
 				List<Cloudlet> newList = broker.getCloudletReceivedList();
 				Log.printLine("Received " + newList.size() + " cloudlets");
 				
 				CloudSim.stopSimulation();
+	
 				Log.printLine("=============> User "+broker.getId()+"    ");
 				Helper.printCloudletList(newList);
+				FogHelper.printFogResults(datacenterList,lastClock,experimentName,outputFolder);
 				//FogHelper.printCloudletHistory(newList);
-			/*	Helper.printResults(
+				/*FogHelper.printResults(
 						datacenter,
 						vmList,
 						lastClock,
@@ -165,5 +175,6 @@ public class FogRunner extends RunnerAbstract{
 
 			Log.printLine("Finished " + experimentName);
 		}
+		
 		
 	}
