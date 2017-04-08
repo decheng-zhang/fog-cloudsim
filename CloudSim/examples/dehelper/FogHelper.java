@@ -278,7 +278,14 @@ public class FogHelper {
 		}
 
 
-		
+		public static List<Vm> createVmList(int brokerId, List<Cloudlet> clList,cloudletBrandAbstract allocator) {
+			List<Vm> tmpvms = new ArrayList<Vm>();
+			for(Cloudlet cl:clList) {
+				allocator.getClBranding(cl.getCloudletId());
+			}
+			return tmpvms;
+			
+		}
 		public static List<Vm> createVmList(int brokerId, int vmsNumber) {
 			vms = new ArrayList<Vm>();
 			for (int i = 0; i < vmsNumber; i++) {
@@ -302,6 +309,7 @@ public class FogHelper {
 			}
 			return vms;
 		}
+		//public static List<>
 		public static void printCloudletHistory(List<Cloudlet> cloudlets) {
 			for(Cloudlet cloudlet:cloudlets) {
 			Log.printLine(cloudlet.getCloudletHistory());

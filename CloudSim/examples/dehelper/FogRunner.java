@@ -11,6 +11,7 @@ import java.util.Map;
 import org.apache.commons.math3.ml.clustering.CentroidCluster;
 import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.Log;
+import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.NetworkTopology;
 import org.cloudbus.cloudsim.VmAllocationPolicy;
 import org.cloudbus.cloudsim.core.CloudSim;
@@ -26,8 +27,9 @@ import org.cloudbus.cloudsim.power.PowerVmAllocationPolicySimple;
 
 public class FogRunner extends RunnerAbstract{
 	private static int iterVersion;
+	private static cloudletBrandAbstract clTypeAllocator=null;
 	KmeanFogletAllocator km=null;
-	
+	private static int brokerId;
 	public int getIterVersion() {
 		return iterVersion;
 	}
@@ -65,15 +67,18 @@ public class FogRunner extends RunnerAbstract{
 				CloudSim.init(1, Calendar.getInstance(), false);
 				
 				FogRunner.broker = FogHelper.createBroker("FogBroker-"+iterVersion);
-				int brokerId = broker.getId();
+				brokerId = broker.getId();
 				cloudletList = FogHelper.createCloudletList(brokerId, FogConst.NUMBER_OF_CLOUDLETS,inputFolder);
+				if (clTypeAllocator ==null){
+				clTypeAllocator = new robinCloudletBrand(cloudletList);
+				}
 				km = new KmeanFogletAllocator(cloudletList,iterVersion);
 				km.printClustererOutput();
 				List<CentroidCluster<Point>> clusterResult = km.getResult();
 				FogHelper.setClusterResult(clusterResult);
 				//System.exit(0);
-				vmList = FogHelper.createVmList(brokerId, FogConst.NUMBER_OF_CLOUDLETS);
-				
+				//vmList = FogHelper.createVmList(brokerId, FogConst.NUMBER_OF_CLOUDLETS);
+				vmList = new ArrayList<Vm>();
 				//hostList = RandomHelper.createHostList(RandomConstants.NUMBER_OF_HOSTS);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -125,6 +130,7 @@ public class FogRunner extends RunnerAbstract{
 						cloudletIdList.add(pt.getCloudletID());
 						cloudletList.add(pt.getCloudlet());
 					}
+					vmList.addAll(FogHelper.createVmList(brokerId,cloudletList,clTypeAllocator));
 						fogCenterToVmMapping.put(datacenterId, cloudletIdList);
 						totalMeanDistance+=(CloudletList.getMeanDistance(cloudletList,localcoor));
 						double subaddtive  = 0;

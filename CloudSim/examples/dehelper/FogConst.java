@@ -25,7 +25,7 @@ public final class FogConst {
 
 	public final static int CLOUDLET_LENGTH	= 500 * (int) SIMULATION_LIMIT;
 	public final static int CLOUDLET_PES	= 1;
-	public final static int CLOUDLET_TYPES = 2;
+	//public final static int CLOUDLET_TYPES = 2;
 	//public final static int[] ClOUDLET_LENGTH = {500* (int)SIMULATION_LIMIT, 50* (int) SIMULATION_LIMIT };
 	
 	
@@ -34,6 +34,12 @@ public final class FogConst {
 
 	//public final static int NUMBER_OF_HOSTS = 15; Using host_types as count of host
 	public final static int NUMBER_OF_CLOUDLETS  = 12;
+	
+	public final static int CLOUDLET_TYPES = 5;
+	public final static int[] CLOUDLET_MIPS = {2300,2300,2300,2300,2300};
+	public final static int[] CLOUDLET_RAM = {1,1,1,1,1};
+	public final static int[] CLOUDLET_BW = {1,1,1,1,1};
+	
 
 	public final static long CLOUDLET_UTILIZATION_SEED = 1;
 	/*
