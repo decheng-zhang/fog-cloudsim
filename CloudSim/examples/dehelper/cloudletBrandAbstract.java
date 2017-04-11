@@ -6,7 +6,11 @@ import java.util.Map;
 
 public abstract class cloudletBrandAbstract {
 	protected Map<Integer, Integer> cltobrandingMap;
-	public cloudletBrandAbstract(List<Cloudlet> cloudletlist) {};
+	protected int[] vmTypes;
+	//public cloudletBrandAbstract() {};
 	public abstract int getClBranding(int cl);
-	
+	public abstract List<CloudletRes> getCloudletResSet(List<Cloudlet> t);
+	public int [] getVmTypes() {
+		return vmTypes;
+	};
 }

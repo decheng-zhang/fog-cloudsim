@@ -65,7 +65,7 @@ public class FogExperienment1 {
 					vmAllocationPolicy,
 					vmSelectionPolicy,
 					parameter,j );
-			System.out.println("Finishing " + j+ " iteration");
+			System.out.println("\nFinishing " + j+ " iteration");
 		
 			}
 			Log.printLine("fog-exper-1 finished!");

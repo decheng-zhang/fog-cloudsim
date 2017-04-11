@@ -33,7 +33,7 @@ public final class FogConst {
 	public final static int NUMBER_OF_VMS = 1;
 
 	//public final static int NUMBER_OF_HOSTS = 15; Using host_types as count of host
-	public final static int NUMBER_OF_CLOUDLETS  = 12;
+	public final static int NUMBER_OF_CLOUDLETS  = 10;
 	
 	public final static int CLOUDLET_TYPES = 5;
 	public final static int[] CLOUDLET_MIPS = {2300,2300,2300,2300,2300};
@@ -50,11 +50,20 @@ public final class FogConst {
 	 * t2.xlarge 4 vcpu, 16 Gib, 0.188 /h
 	 * t2.2xlarge 8 vcpu, 32 Gib, 0.376 /h
 	 */
-	public final static int VM_TYPES	= 5;
-	public final static int[] VM_MIPS	= { 2300, 2300, 2300, 2400,2400 };
-	public final static int[] VM_PES	= { 1, 2, 2, 4, 8 };
-	public final static int[] VM_RAM	= { 2048,  4096, 8192, 16384, 32768};
-	public final static int VM_BW		= 100000; // 100 Mbit/s
+	/*
+	 * VM aws:
+	 * t2.nano	t2.micro	t2.small	t2.medium	t2.large	t2.xlarge	t2.2xlarge	m4.large	m4.xlarge	m4.2xlarge	m4.4xlarge	m4.10xlarge	m4.16xlarge	p2.xlarge	p2.8xlarge	p2.16xlarge	g2.2xlarge	g2.8xlarge
+
+	 */
+	public final static int VM_TYPES	= 18;
+	public final static int[] VM_MIPS	= { 2500,2500,2500,2500,2500,2500,2500,2500,2500,2500,2500,2500,2500,2500,2500,2500,2500,2500 };
+	//public final static int[] VM_PES	= { 1, 2, 2, 4, 8 };
+	public final static int[] VM_PES	= {1,1,1,2,2,4,8,2,4,8,16,40,64,4,32,64,8,32};
+	//public final static int[] VM_RAM	= { 2048,  4096, 8192, 16384, 32768};
+	public final static int[] VM_RAM	= { 512,1024,2048,4096,8192,16384,32768,8192,16384,32768,65536,163840,262144,62464,499712,749568,15360,61440};
+	public final static int[] VM_GPES   = { 0,0,0,0,0,0,0,0,0,0,0,0,0,1,8,16,1,4 };
+	//public final static int VM_BW		= 100000; // 100 Mbit/s
+	public final static int [] VM_BW       = { 250000,300000,300000,300000,300000,500000,500000,500000,1024000,1024000,1024000,10240000,20480000,1024000,10240000,20480000,1024000,10240000 };
 	public final static int VM_SIZE		= 2500; // 2.5 GB
 
 	/*
@@ -67,7 +76,7 @@ public final class FogConst {
 	 *   We increase the memory size to enable over-subscription (x4)
 	 */
 	public final static int HOST_TYPES	 =5;
-	public final static int[] HOST_MIPS	 = { 1860, 2660 ,2500,2500,2500};
+	public final static int[] HOST_MIPS	 = { 3300,3300,3300,3300,3300 };
 	public final static int[] HOST_PES	 = { 2, 2 ,6,12,32};
 	public final static int[] HOST_RAM	 = { 4096, 4096 ,32768,65536,131072};
 	public final static int HOST_BW		 = 1000000; // 1 Gbit/s

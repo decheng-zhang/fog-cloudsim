@@ -77,7 +77,7 @@ public class FogHelper {
 	static List<Vm> vms;
 	static Map<Integer,List<Integer>> fogCenterToVmMapping;
 	static Map<Integer,List<Vm>> fogcenterToVm;
-	
+	static int VMINDEX = -1;
 
 	public static Map<Integer, List<Vm>> getFogCenterToVmMapping() {
 		
@@ -85,7 +85,7 @@ public class FogHelper {
 	}
 	public static void setFogCenterToVmMapping(Map<Integer, List<Integer>> fogCenterToVmMapping) {
 		FogHelper.fogCenterToVmMapping = fogCenterToVmMapping;
-		fogcenterToVm = new HashMap<Integer, List<Vm>>();
+		fogcenterToVm = new HashMap<Integer, List<? extends Vm>>();
 		for(Integer centerId: fogCenterToVmMapping.keySet()){
 			List<Vm> tempVmList = new ArrayList<Vm>();	
 			for(Integer vmid: fogCenterToVmMapping.get(centerId)) {
@@ -96,6 +96,13 @@ public class FogHelper {
 		}
 		
 	}
+	public static void setFogCenterToVm(Map<Integer, List<Vm>> fogCenterToVmMapping) {
+		FogHelper.fogCenterToVmMapping = null;
+		fogcenterToVm = fogCenterToVmMapping;
+
+		}
+		
+	
 	public static void setClusterResult(List<CentroidCluster<Point>> rr) {
 		FogHelper.clusterResult=rr ;
 		
@@ -278,14 +285,42 @@ public class FogHelper {
 		}
 
 
-		public static List<Vm> createVmList(int brokerId, List<Cloudlet> clList,cloudletBrandAbstract allocator) {
-			List<Vm> tmpvms = new ArrayList<Vm>();
-			for(Cloudlet cl:clList) {
-				allocator.getClBranding(cl.getCloudletId());
-			}
-			return tmpvms;
+		public static Map<Integer,Vm> createVmList(int brokerId, List<Cloudlet> clList,cloudletBrandAbstract allocator) {
 			
+			Map<Integer,Vm> CloudletIdToVm = new HashMap<Integer,Vm>();
+			
+				 List<CloudletRes> clresSet = allocator.getCloudletResSet(clList);
+				 
+			
+			for(CloudletRes clres :clresSet) {
+				int vmType = clres.getVmType();
+				
+				clres.setVmId(++VMINDEX);
+				
+					PowerVm pv = new PowerVm(
+								VMINDEX,
+								brokerId,
+								FogConst.VM_MIPS[vmType],
+								FogConst.VM_PES[vmType],
+								FogConst.VM_RAM[vmType],
+								FogConst.VM_BW[vmType],
+								FogConst.VM_SIZE,
+								1,
+								"Xen",
+								new CloudletSchedulerDynamicWorkload(FogConst.VM_MIPS[vmType], FogConst.VM_PES[vmType]),
+								
+								FogConst.SCHEDULING_INTERVAL);
+					for(int i:clres.getCloudletId()) {
+						CloudletIdToVm.put(i,pv);
+					}	
+			};
+			
+		
+			return CloudletIdToVm;
+		
 		}
+		
+
 		public static List<Vm> createVmList(int brokerId, int vmsNumber) {
 			vms = new ArrayList<Vm>();
 			for (int i = 0; i < vmsNumber; i++) {

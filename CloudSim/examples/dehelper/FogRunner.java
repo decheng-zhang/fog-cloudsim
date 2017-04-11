@@ -4,11 +4,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.math3.ml.clustering.CentroidCluster;
+import org.apache.commons.math3.util.MultidimensionalCounter.Iterator;
 import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.Vm;
@@ -21,15 +23,17 @@ import org.cloudbus.cloudsim.examples.power.random.RandomConstants;
 import org.cloudbus.cloudsim.examples.power.random.RandomHelper;
 import org.cloudbus.cloudsim.lists.CloudletList;
 import org.cloudbus.cloudsim.power.PowerDatacenter;
+import org.cloudbus.cloudsim.power.PowerVm;
 import org.cloudbus.cloudsim.power.PowerVmAllocationPolicySimple;
 
 
 
 public class FogRunner extends RunnerAbstract{
 	private static int iterVersion;
-	private static cloudletBrandAbstract clTypeAllocator=null;
+	private robinCloudletBrand clmapvm = null;
 	KmeanFogletAllocator km=null;
 	private static int brokerId;
+	private static Map<Integer,Vm> totalCloudletidToVmbinding=null;
 	public int getIterVersion() {
 		return iterVersion;
 	}
@@ -63,15 +67,19 @@ public class FogRunner extends RunnerAbstract{
 			try {
 				
 				FogRunner.iterVersion++;
+				FogHelper.VMINDEX = -1;
 				this.datacenterList = new ArrayList<PowerDatacenter>();
+				totalCloudletidToVmbinding = new HashMap<Integer,Vm>();
 				CloudSim.init(1, Calendar.getInstance(), false);
 				
 				FogRunner.broker = FogHelper.createBroker("FogBroker-"+iterVersion);
 				brokerId = broker.getId();
-				cloudletList = FogHelper.createCloudletList(brokerId, FogConst.NUMBER_OF_CLOUDLETS,inputFolder);
-				if (clTypeAllocator ==null){
-				clTypeAllocator = new robinCloudletBrand(cloudletList);
-				}
+				clmapvm = new robinCloudletBrand(inputFolder+".in");
+				
+				cloudletList = FogHelper.createCloudletList(brokerId, clmapvm.getCloudletNumber(),inputFolder);
+				
+				
+
 				km = new KmeanFogletAllocator(cloudletList,iterVersion);
 				km.printClustererOutput();
 				List<CentroidCluster<Point>> clusterResult = km.getResult();
@@ -110,7 +118,7 @@ public class FogRunner extends RunnerAbstract{
 				Log.printLine("Showing network-topology");
 				Log.print(NetworkTopology.printOutGraph());
 				*/
-				Map<Integer,List<Integer>> fogCenterToVmMapping = new HashMap<Integer,List<Integer>>();
+				Map<Integer,List<Vm>> fogCenterToVm = new HashMap<Integer,List<Vm>>();
 				double totalMeanDistance=0;
 				double totalNetworkBuildingCost = 0;
 				double fogCoorlist[][] = new double [iterVersion][2];
@@ -130,8 +138,24 @@ public class FogRunner extends RunnerAbstract{
 						cloudletIdList.add(pt.getCloudletID());
 						cloudletList.add(pt.getCloudlet());
 					}
-					vmList.addAll(FogHelper.createVmList(brokerId,cloudletList,clTypeAllocator));
-						fogCenterToVmMapping.put(datacenterId, cloudletIdList);
+					/*
+					 * tempVms is the cloudletid mapping to Vm, multicloudlet can map to same vm with
+					 * muliple record in map.
+					 */
+					Map<Integer,Vm> tempVms =FogHelper.createVmList(brokerId,cloudletList,clmapvm);
+					totalCloudletidToVmbinding.putAll(tempVms);
+					Collection<Vm> et = tempVms.values();
+					//Iterator<Vm> itr = et.iterator();
+					List<Vm> tempVmsls= new ArrayList<Vm>();
+					Vm previous = null;
+					for(Vm current:et) {
+						if(!tempVmsls.contains(current)) {
+						tempVmsls.add(current);
+						
+						}
+					}
+					vmList.addAll(tempVmsls);
+					fogCenterToVm.put(datacenterId, tempVmsls);//TO-do change to vmid(not 1-1)
 						totalMeanDistance+=(CloudletList.getMeanDistance(cloudletList,localcoor));
 						double subaddtive  = 0;
 						for(int i=0;i<j;i++) {
@@ -142,16 +166,14 @@ public class FogRunner extends RunnerAbstract{
 				 	
 					System.out.print("The average distance from cloudlets to nearest fog server is " +  totalMeanDistance/iterVersion);
 					System.out.print("The total network need to build " +  totalNetworkBuildingCost);
-				FogHelper.setFogCenterToVmMapping(fogCenterToVmMapping);
+				FogHelper.setFogCenterToVm(fogCenterToVm);
 				broker.submitVmList(vmList);
 				broker.submitCloudletList(cloudletList);
 				//for(int i=0;i<km.getResult().size();i++) {
 					//for (Point point:km.getResult().get(i).getPoints())
-					for(int i=0;i< cloudletList.size();i++) 
-					{
-						broker.bindCloudletToVm(i, i);
-					}
-						//}
+				for (Map.Entry<Integer, Vm> pair : totalCloudletidToVmbinding.entrySet()) {
+					broker.bindCloudletToVm(pair.getKey(), pair.getValue().getId());
+				}
 				
 				CloudSim.terminateSimulation(2000);
 				double lastClock = CloudSim.startSimulation();
