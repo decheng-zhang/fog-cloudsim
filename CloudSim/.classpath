@@ -8,5 +8,11 @@
 	<classpathentry kind="lib" path="jars/cloudsim-3.0.3.jar"/>
 	<classpathentry kind="lib" path="jars/cloudsim-examples-3.0.3-sources.jar"/>
 	<classpathentry kind="lib" path="jars/cloudsim-examples-3.0.3.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Brite_visualizer">
+		<accessrules>
+			<accessrule kind="accessible" pattern=".*"/>
+		</accessrules>
+	</classpathentry>
+	<classpathentry kind="lib" path="jars/britevisualizer.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

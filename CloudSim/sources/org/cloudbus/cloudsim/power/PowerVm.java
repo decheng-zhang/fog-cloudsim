@@ -35,7 +35,7 @@ public class PowerVm extends Vm {
 
 	/** The Constant HISTORY_LENGTH. */
 	public static final int HISTORY_LENGTH = 30;
-
+	
 	/** The utilization history. */
 	private final List<Double> utilizationHistory = new LinkedList<Double>();
 
@@ -45,6 +45,7 @@ public class PowerVm extends Vm {
 	/** The scheduling interval. */
 	private double schedulingInterval;
 
+	private String APP=new String();
 	/**
 	 * Instantiates a new power vm.
 	 * 
@@ -220,6 +221,20 @@ public class PowerVm extends Vm {
 	 */
 	protected void setSchedulingInterval(final double schedulingInterval) {
 		this.schedulingInterval = schedulingInterval;
+	}
+
+	/**
+	 * @return the aPP
+	 */
+	public String getAPP() {
+		return APP;
+	}
+
+	/**
+	 * @param aPP the aPP to set
+	 */
+	public void setAPP(String aPP) {
+		APP = aPP;
 	}
 
 }

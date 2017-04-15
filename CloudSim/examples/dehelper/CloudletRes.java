@@ -19,6 +19,8 @@ public class CloudletRes {
 		StringTokenizer t = new StringTokenizer(input);
 		cloudletId = new ArrayList<Integer>();
 		cloudletId.add(Integer.parseInt(t.nextToken()));
+		t.nextToken();
+		t.nextToken();
 		UserCount = Integer.parseInt(t.nextToken());
 		appType = Integer.parseInt(t.nextToken());
 		//discard the in and out degree.

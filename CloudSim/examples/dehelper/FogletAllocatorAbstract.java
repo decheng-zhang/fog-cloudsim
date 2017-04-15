@@ -13,6 +13,9 @@ public abstract class FogletAllocatorAbstract {
 	public FogletAllocatorAbstract(List<Cloudlet> cloudlets) {
 		
 	};
+	public List<CentroidCluster<Point>> getResult(){
+		return this.clusterResults;
+	}
 	
 	public abstract void printClustererOutput();
 	}

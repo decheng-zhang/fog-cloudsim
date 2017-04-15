@@ -24,10 +24,7 @@ public class KmeanFogletAllocator extends FogletAllocatorAbstract{
 		this.clusterResults = clusterer.cluster(cloudletLoca);
 		
 	}
-	public List<CentroidCluster<Point>> getResult(){
-		return this.clusterResults;
-	}
-	
+
 	public void printClustererOutput(){ 
 		DecimalFormat dft = new DecimalFormat("###.####");
 		String indent = "\t";

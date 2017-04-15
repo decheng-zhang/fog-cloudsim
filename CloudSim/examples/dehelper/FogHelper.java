@@ -130,7 +130,9 @@ public class FogHelper {
 		 * 
 		 * @return the list< cloudlet>
 		 */
-		public static List<Cloudlet> createCloudletList(int brokerId,int cloudletsNumber,String inputFolderName) {
+		public static List<Cloudlet> createCloudletList(int brokerId,robinCloudletBrand opertor,String inputFolderName) {
+			int cloudletsNumber=opertor.getCloudletNumber();
+			double lm [][] = opertor.getLocationMatrix();
 			if (cloudlets ==null) {
 				
 			
@@ -173,7 +175,10 @@ public class FogHelper {
 								outputSize,
 								new UtilizationModelPlanetLabInMemory(
 										files[i].getAbsolutePath(),
-										FogConst.SCHEDULING_INTERVAL), utilizationModelNull, utilizationModelNull);
+										FogConst.SCHEDULING_INTERVAL), utilizationModelNull, utilizationModelNull,
+								false,
+								lm[i][0],
+								lm[i][1]);
 					} catch (Exception e) {
 						e.printStackTrace();
 						System.exit(0);
@@ -289,7 +294,7 @@ public class FogHelper {
 			
 			Map<Integer,Vm> CloudletIdToVm = new HashMap<Integer,Vm>();
 			
-				 List<CloudletRes> clresSet = allocator.getCloudletResSet(clList);
+				 List<CloudletRes> clresSet = allocator.getCloudletResSet(clList,true);
 				 
 			
 			for(CloudletRes clres :clresSet) {
@@ -310,6 +315,8 @@ public class FogHelper {
 								new CloudletSchedulerDynamicWorkload(FogConst.VM_MIPS[vmType], FogConst.VM_PES[vmType]),
 								
 								FogConst.SCHEDULING_INTERVAL);
+					String appname = clres.getAppType()==-1?"On-demand":FogConst.APPNAME[clres.getAppType()];
+					pv.setAPP(appname);
 					for(int i:clres.getCloudletId()) {
 						CloudletIdToVm.put(i,pv);
 					}	

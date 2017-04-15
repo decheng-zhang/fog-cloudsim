@@ -356,7 +356,7 @@ public class DatacenterBroker extends SimEntity {
 			}
 
 			Log.printLine(CloudSim.clock() + ": " + getName() + ": Sending cloudlet "
-					+ cloudlet.getCloudletId() + " to VM #" + vm.getId());
+					+ cloudlet.getCloudletId() + " to VM #" + vm.getId() + vm.getAPP());
 			cloudlet.setVmId(vm.getId());
 			sendNow(getVmsToDatacentersMap().get(vm.getId()), CloudSimTags.CLOUDLET_SUBMIT, cloudlet);
 			cloudletsSubmitted++;

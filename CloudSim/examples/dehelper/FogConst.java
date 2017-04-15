@@ -33,12 +33,21 @@ public final class FogConst {
 	public final static int NUMBER_OF_VMS = 1;
 
 	//public final static int NUMBER_OF_HOSTS = 15; Using host_types as count of host
-	public final static int NUMBER_OF_CLOUDLETS  = 10;
-	
+	//public final static int NUMBER_OF_CLOUDLETS  = 10;
+	/*
+	 * periodic cloudlet app id 
+	 * apple netflix google AWS GTA5
+	 */
 	public final static int CLOUDLET_TYPES = 5;
+	public final static String []APPNAME = {" apple", " netflix", " google", " AWS", " GTA5"};
+	//MIPS (MHZ) ex:2.3 GHZ = 2300
 	public final static int[] CLOUDLET_MIPS = {2300,2300,2300,2300,2300};
-	public final static int[] CLOUDLET_RAM = {1,1,1,1,1};
-	public final static int[] CLOUDLET_BW = {1,1,1,1,1};
+	
+	//Memory(MBYTES): ex:1GB = 1024
+	public final static int[] CLOUDLET_RAM = {1024,500,500,1000,50};
+	
+	// BandWidth (Kbit/s): ex:3 Mbit/s is 3000
+	public final static int[] CLOUDLET_BW = {3000,25000,2000,5000,10000};
 	
 
 	public final static long CLOUDLET_UTILIZATION_SEED = 1;

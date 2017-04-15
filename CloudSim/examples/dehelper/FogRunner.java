@@ -31,7 +31,7 @@ import org.cloudbus.cloudsim.power.PowerVmAllocationPolicySimple;
 public class FogRunner extends RunnerAbstract{
 	private static int iterVersion;
 	private robinCloudletBrand clmapvm = null;
-	KmeanFogletAllocator km=null;
+	FogletAllocatorAbstract km=null;
 	private static int brokerId;
 	private static Map<Integer,Vm> totalCloudletidToVmbinding=null;
 	public int getIterVersion() {
@@ -65,7 +65,7 @@ public class FogRunner extends RunnerAbstract{
 		@Override
 		protected void init(String inputFolder) {
 			try {
-				
+				NetworkTopology.buildNetworkTopology("/CloudSim/examples/dehelper/topo/test.brite");
 				FogRunner.iterVersion++;
 				FogHelper.VMINDEX = -1;
 				this.datacenterList = new ArrayList<PowerDatacenter>();
@@ -76,7 +76,7 @@ public class FogRunner extends RunnerAbstract{
 				brokerId = broker.getId();
 				clmapvm = new robinCloudletBrand(inputFolder+".in");
 				
-				cloudletList = FogHelper.createCloudletList(brokerId, clmapvm.getCloudletNumber(),inputFolder);
+				cloudletList = FogHelper.createCloudletList(brokerId, clmapvm,inputFolder);
 				
 				
 
@@ -147,7 +147,7 @@ public class FogRunner extends RunnerAbstract{
 					Collection<Vm> et = tempVms.values();
 					//Iterator<Vm> itr = et.iterator();
 					List<Vm> tempVmsls= new ArrayList<Vm>();
-					Vm previous = null;
+					
 					for(Vm current:et) {
 						if(!tempVmsls.contains(current)) {
 						tempVmsls.add(current);
@@ -194,7 +194,7 @@ public class FogRunner extends RunnerAbstract{
 						experimentName,
 						Constants.OUTPUT_CSV,
 						outputFolder);*/
-
+				call("examples/dehelper/topo/test.brite");
 			} catch (Exception e) {
 				e.printStackTrace();
 				Log.printLine("The simulation has been terminated due to an unexpected error");
@@ -203,6 +203,10 @@ public class FogRunner extends RunnerAbstract{
 
 			Log.printLine("Finished " + experimentName);
 		}
+		 public void call(String output){
+			 String []O= {output,};
+		       FogVisualizer.main(O);
+		    }
 		
 		
 	}

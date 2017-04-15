@@ -606,4 +606,5 @@ public class Vm {
 		getStateHistory().add(newState);
 	}
 
+	public String getAPP() {return "";};
 }

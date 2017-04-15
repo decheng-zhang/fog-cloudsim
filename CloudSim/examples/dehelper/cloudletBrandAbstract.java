@@ -9,7 +9,7 @@ public abstract class cloudletBrandAbstract {
 	protected int[] vmTypes;
 	//public cloudletBrandAbstract() {};
 	public abstract int getClBranding(int cl);
-	public abstract List<CloudletRes> getCloudletResSet(List<Cloudlet> t);
+	public abstract List<CloudletRes> getCloudletResSet(List<Cloudlet> t,boolean mergeable);
 	public int [] getVmTypes() {
 		return vmTypes;
 	};
